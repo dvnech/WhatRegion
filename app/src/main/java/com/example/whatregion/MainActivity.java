@@ -3,6 +3,7 @@ package com.example.whatregion;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -42,5 +43,51 @@ public class MainActivity extends AppCompatActivity {
         btnSet = findViewById(R.id.btnSet);
 
 
+    }
+
+    public void onButtonPressed(View v){
+
+        String s = etRegionNum.getText().toString();
+        switch(v.getId()){
+            case R.id.btnOne:{
+                etRegionNum.setText(s + "1");
+                break;
+            }case R.id.btnTwo:{
+                etRegionNum.setText(s + "2");
+                break;
+            }case R.id.btnThree:{
+                etRegionNum.setText(s + "3");
+                break;
+            }case R.id.btnFour:{
+                etRegionNum.setText(s + "4");
+                break;
+            }case R.id.btnFive:{
+                etRegionNum.setText(s + "5");
+                break;
+            }case R.id.btnSix:{
+                etRegionNum.setText(s + "6");
+                break;
+            }case R.id.btnSeven:{
+                etRegionNum.setText(s + "7");
+                break;
+            }case R.id.btnEight:{
+                etRegionNum.setText(s + "8");
+                break;
+            }case R.id.btnNine:{
+                etRegionNum.setText(s + "9");
+                break;
+            }case R.id.btnClear:{
+                if(s.length() > 0) {
+                    etRegionNum.setText(s.substring(0,s.length()-1));
+                }
+                break;
+            }case R.id.btnZero:{
+                etRegionNum.setText(s + "0");
+                break;
+            }case R.id.btnSet:{
+                //PerformAction
+                break;
+            }
+        }
     }
 }
