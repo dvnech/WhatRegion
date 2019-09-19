@@ -2,14 +2,24 @@ package com.example.whatregion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText etRegionNum;
+    TextView tvShowRegion;
+    ArrayList<RegionObject> listOfData;
+    RegionObject homeRegion;
 
     Button btnOne;
     Button btnTwo;
@@ -23,12 +33,18 @@ public class MainActivity extends AppCompatActivity {
     Button btnZero;
     Button btnClear;
     Button btnSet;
+
+    SharedPreferences sharedPreferences;
+    private final String SHARED_PREF = "SHARED_PREF";
+    private final String HOME_REG_VALUE = "HOME_REG_VALUE";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         etRegionNum = findViewById(R.id.etRegionNum);
+        tvShowRegion = findViewById(R.id.textView);
+
         btnOne = findViewById(R.id.btnOne);
         btnTwo = findViewById(R.id.btnTwo);
         btnFour = findViewById(R.id.btnFour);
@@ -41,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
         btnZero = findViewById(R.id.btnZero);
         btnClear = findViewById(R.id.btnClear);
         btnSet = findViewById(R.id.btnSet);
+
+        listOfData = AppData.getArrayOfData();
+        homeRegion = loadHomeRegion();
 
 
     }
@@ -89,5 +108,71 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
+
+        checkRegion(s,listOfData);
     }
+
+    private void checkRegion(String regNumber,ArrayList<RegionObject> arr){
+        RegionObject region;
+
+        for(RegionObject object:arr){
+            if(object.getRegionNumber().equals(regNumber)){
+                tvShowRegion.setText(object.getRegionName());
+                String distanceFromHomeRegion = calculateDistance(object.getLat(),object.getLon());
+                if(!distanceFromHomeRegion.equals("")){
+                    //Show distance
+                }
+                break;
+            }
+        }
+
+
+    }
+
+    private String calculateDistance(Double lat,Double lon){
+        if(homeRegion != null){
+            String dist = "1";
+            //Method Realization
+
+            return dist;
+        }
+        return "";
+    }
+
+    private RegionObject loadHomeRegion(){
+        sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
+        String jsonString = sharedPreferences.getString(HOME_REG_VALUE,"");
+        if(jsonString != null){
+            try {
+                JSONObject obj= new JSONObject(jsonString);
+                homeRegion.setRegionNumber(obj.getString(AppData.));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
