@@ -10,10 +10,10 @@ public class AppData {
     private static final String JSON_NAME = "JSON_NAME";
     private static final String SHARED_PREF = "SHARED_PREF";
 
-    private static final String REGION_NUMBER = "REGION_NUMBER";
-    private static final String REGION_NAME = "REGION_NAME";
-    private static final String REGION_LAT = "REGION_LAT";
-    private static final String REGION_LON = "REGION_LON";
+    public static final String REGION_NUMBER = "REGION_NUMBER";
+    public static final String REGION_NAME = "REGION_NAME";
+    public static final String REGION_LAT = "REGION_LAT";
+    public static final String REGION_LON = "REGION_LON";
 
     private static final String JsonData = "";
 

@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     private final String SHARED_PREF = "SHARED_PREF";
     private final String HOME_REG_VALUE = "HOME_REG_VALUE";
+    private final String IS_FIRST_TIME_LAUNCH = "IS_FIRST_TIME_LAUNCH";
+    private boolean isFirstLaunch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +60,17 @@ public class MainActivity extends AppCompatActivity {
         btnClear = findViewById(R.id.btnClear);
         btnSet = findViewById(R.id.btnSet);
 
+        sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
+
         listOfData = AppData.getArrayOfData();
         homeRegion = loadHomeRegion();
+        isFirstLaunch = checkIfFirstLauch();
 
 
+    }
+
+    private boolean checkIfFirstLauch(){
+        isFirstLaunch = sharedPreferences.getBoolean(IS_FIRST_TIME_LAUNCH,true);
     }
 
     public void onButtonPressed(View v){
@@ -117,16 +126,38 @@ public class MainActivity extends AppCompatActivity {
 
         for(RegionObject object:arr){
             if(object.getRegionNumber().equals(regNumber)){
-                tvShowRegion.setText(object.getRegionName());
-                String distanceFromHomeRegion = calculateDistance(object.getLat(),object.getLon());
-                if(!distanceFromHomeRegion.equals("")){
-                    //Show distance
+                if(!isFirstLaunch) {
+                    tvShowRegion.setText(object.getRegionName());
+                    String distanceFromHomeRegion = calculateDistance(object.getLat(), object.getLon());
+                    if (!distanceFromHomeRegion.equals("")) {
+                        //Show distance
+                    }
+                }else{
+                    isFirstLaunch = false;
+                    homeRegion = object;
+                    saveIsFirstLaunch(isFirstLaunch);
+                    saveRegion(homeRegion);
+                    break;
                 }
+            }
                 break;
             }
+    }
+    private void saveRegion(RegionObject obj){
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(AppData.REGION_NAME,obj.getRegionName());
+            jsonObject.put(AppData.REGION_NUMBER,obj.getRegionNumber());
+            jsonObject.put(AppData.REGION_LAT,obj.getLat());
+            jsonObject.put(AppData.REGION_LON,obj.getLon());
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+    }
 
-
+    private void saveIsFirstLaunch(boolean b){
+        sharedPreferences.edit().putBoolean(IS_FIRST_TIME_LAUNCH,b).apply();
     }
 
     private String calculateDistance(Double lat,Double lon){
@@ -140,12 +171,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private RegionObject loadHomeRegion(){
-        sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
         String jsonString = sharedPreferences.getString(HOME_REG_VALUE,"");
         if(jsonString != null){
             try {
                 JSONObject obj= new JSONObject(jsonString);
-                homeRegion.setRegionNumber(obj.getString(AppData.));
+                String name = obj.getString(AppData.REGION_NAME);
+                String num = obj.getString(AppData.REGION_NUMBER);
+                double lat = obj.getDouble(AppData.REGION_LAT);
+                double lon = obj.getDouble(AppData.REGION_LON);
+                homeRegion = new RegionObject(num,name,lat,lon);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
