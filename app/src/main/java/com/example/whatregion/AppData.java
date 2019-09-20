@@ -1,5 +1,7 @@
 package com.example.whatregion;
 
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +17,54 @@ public class AppData {
     public static final String REGION_LAT = "REGION_LAT";
     public static final String REGION_LON = "REGION_LON";
 
-    private static final String JsonData = "";
+    private static final String JsonData = "[{\n" +
+            "  \"REGION_NUMBER\": \"51\",\n" +
+            "  \"REGION_NAME\": \"ноорг\",\n" +
+            "  \"REGION_LAT\": 345,\n" +
+            "  \"REGION_LON\": 321\n" +
+            "},\n" +
+            "{\n" +
+            "  \"REGION_NUMBER\": \"23\",\n" +
+            "  \"REGION_NAME\": \"тест111\",\n" +
+            "  \"REGION_LAT\": 345,\n" +
+            "  \"REGION_LON\": 432\n" +
+            "},\n" +
+            "{\n" +
+            "  \"REGION_NUMBER\": \"44\",\n" +
+            "  \"REGION_NAME\": \"кенглонерн\",\n" +
+            "  \"REGION_LAT\": 345,\n" +
+            "  \"REGION_LON\": 432\n" +
+            "},\n" +
+            "{\n" +
+            "  \"REGION_NUMBER\": \"01\",\n" +
+            "  \"REGION_NAME\": \"Республика Адыгея\",\n" +
+            "  \"REGION_LAT\": 44.7692,\n" +
+            "  \"REGION_LON\": 40.1765\n" +
+            "},\n" +
+            "{\n" +
+            "  \"REGION_NUMBER\": \"02\",\n" +
+            "  \"REGION_NAME\": \"Республика Башкортостан\",\n" +
+            "  \"REGION_LAT\": 52.3735,\n" +
+            "  \"REGION_LON\": 56.3431\n" +
+            "},\n" +
+            "{\n" +
+            "  \"REGION_NUMBER\": \"102\",\n" +
+            "  \"REGION_NAME\": \"Республика Башкортостан\",\n" +
+            "  \"REGION_LAT\": 52.3735,\n" +
+            "  \"REGION_LON\": 56.3431\n" +
+            "},\n" +
+            "{\n" +
+            "  \"REGION_NUMBER\": \"03\",\n" +
+            "  \"REGION_NAME\": \"Республика Бурятия\",\n" +
+            "  \"REGION_LAT\": 51.819,\n" +
+            "  \"REGION_LON\": 106.784\n" +
+            "},\n" +
+            "{\n" +
+            "  \"REGION_NUMBER\": \"04\",\n" +
+            "  \"REGION_NAME\": \"Республика Алтай\",\n" +
+            "  \"REGION_LAT\": 50.648,\n" +
+            "  \"REGION_LON\": 86.887\n" +
+            "}]";
 
     public static ArrayList<RegionObject> getArrayOfData(){
         JSONArray arrayOfRegions;
@@ -37,7 +86,7 @@ public class AppData {
                 arrayOfRegions = new JSONArray();
             }
         }catch (JSONException exc){
-
+            exc.printStackTrace();
         }
         return arrayList;
     }
