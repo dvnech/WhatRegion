@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,16 +71,13 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
 
         listOfData = AppData.getArrayOfData();
-        Toast.makeText(this,"size " + listOfData.size(),Toast.LENGTH_SHORT).show();
-        for(int i = 0;i<listOfData.size();i++){
-            Log.d("MYTAG1",listOfData.get(i).getRegionNumber());
-        }
         homeRegion = loadHomeRegion();
         isFirstLaunch = checkIfFirstLauch();
-        isFirstLaunch = true;
 
         if(!isFirstLaunch){
             btnSet.setVisibility(View.INVISIBLE);
+        }else{
+            tvFirstLaunch.setText(getString(R.string.first_launch));
         }
 
 
@@ -123,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
             }case R.id.btnClear:{
                 if(s.length() > 0) {
                     etRegionNum.setText(s.substring(0,s.length()-1));
+                    tvFirstLaunch.setText("");
+                    tvShowRegion.setText("Введите регион");
                 }
                 break;
             }case R.id.btnZero:{
@@ -157,7 +158,10 @@ public class MainActivity extends AppCompatActivity {
                     tvFirstLaunch.setText("Домашний регион");
                 }
             }
+        }if(object == null && regNumber.length()>1){
+            tvShowRegion.setText("Регион не найден");
         }
+
     }
     private RegionObject findRegion(String regNumber,ArrayList<RegionObject> arr){
         RegionObject object;
@@ -232,6 +236,24 @@ public class MainActivity extends AppCompatActivity {
         }else{return null;}
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.menu_reset_region:{
+                isFirstLaunch = true;
+                btnSet.setVisibility(View.VISIBLE);
+                homeRegion = null;
+                tvFirstLaunch.setText(getString(R.string.first_launch));
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
 
 

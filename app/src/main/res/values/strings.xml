@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">What Region</string>
+    <string name="first_launch">Введите Ваш домашний регион и нажмите ОК</string>
 </resources>
