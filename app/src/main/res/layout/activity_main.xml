@@ -81,16 +81,16 @@
         app:layout_constraintVertical_bias="0.2" />
 
     <Button
-        android:onClick="onButtonPressed"
         android:id="@+id/btnFour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onButtonPressed"
         android:text="4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnFive"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        app:layout_constraintVertical_bias="0.6" />
+        app:layout_constraintVertical_bias="0.4" />
 
     <Button
         android:onClick="onButtonPressed"
@@ -118,16 +118,16 @@
         app:layout_constraintVertical_bias="0.6" />
 
     <Button
-        android:onClick="onButtonPressed"
         android:id="@+id/btnSeven"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onButtonPressed"
         android:text="7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnEight"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        app:layout_constraintVertical_bias="0.39999998" />
+        app:layout_constraintVertical_bias="0.6" />
 
     <Button
         android:onClick="onButtonPressed"
@@ -179,14 +179,25 @@
         app:layout_constraintVertical_bias="0.8" />
 
     <Button
-        android:onClick="onButtonPressed"
         android:id="@+id/btnSet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set"
+        android:onClick="onButtonPressed"
+        android:text="OK"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnZero"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         app:layout_constraintVertical_bias="0.8" />
+
+    <TextView
+        android:id="@+id/tv_first_launch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etRegionNum" />
 </androidx.constraintlayout.widget.ConstraintLayout>

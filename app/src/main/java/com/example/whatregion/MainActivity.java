@@ -3,6 +3,7 @@ package com.example.whatregion;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,12 +15,14 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText etRegionNum;
     TextView tvShowRegion;
+    TextView tvFirstLaunch;
     ArrayList<RegionObject> listOfData;
     RegionObject homeRegion;
 
@@ -45,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         etRegionNum = findViewById(R.id.etRegionNum);
         tvShowRegion = findViewById(R.id.textView);
+        tvFirstLaunch = findViewById(R.id.tv_first_launch);
 
         btnOne = findViewById(R.id.btnOne);
         btnTwo = findViewById(R.id.btnTwo);
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         btnClear = findViewById(R.id.btnClear);
         btnSet = findViewById(R.id.btnSet);
 
+
         sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
 
         listOfData = AppData.getArrayOfData();
@@ -71,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
         }
         homeRegion = loadHomeRegion();
         isFirstLaunch = checkIfFirstLauch();
+        isFirstLaunch = true;
+
+        if(!isFirstLaunch){
+            btnSet.setVisibility(View.INVISIBLE);
+        }
 
 
     }
@@ -121,6 +130,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }case R.id.btnSet:{
                 //PerformAction
+                homeRegion = findRegion(etRegionNum.getText().toString(),listOfData);
+                if(homeRegion != null){
+                    saveRegion(homeRegion);
+                    btnSet.setVisibility(View.INVISIBLE);
+                    Toast.makeText(this,"Домашний регион сохранен",Toast.LENGTH_SHORT).show();
+                    isFirstLaunch = false;
+                    saveIsFirstLaunch(isFirstLaunch);
+                }
                 break;
             }
         }
@@ -129,17 +146,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkRegion(String regNumber,ArrayList<RegionObject> arr){
-        RegionObject object;
-        for(int i = 0;i<listOfData.size();i++){
-            object = listOfData.get(i);
-            if(object.getRegionNumber().equals(regNumber)){
-                    tvShowRegion.setText(object.getRegionName());
-                    String distanceFromHomeRegion = calculateDistance(object.getLat(), object.getLon());
-                    if (!distanceFromHomeRegion.equals("")) {
-                        //Show distance
+        RegionObject object = findRegion(regNumber,arr);
+        if(object != null){
+            tvShowRegion.setText(object.getRegionName());
+            String distanceFromHomeRegion = calculateDistance(object.getLat(), object.getLon());
+            if (!distanceFromHomeRegion.equals("")) {
+                if(!distanceFromHomeRegion.equals("0")) {
+                    tvFirstLaunch.setText("Примерно " + distanceFromHomeRegion + " км от Вашего региона");
+                }else{
+                    tvFirstLaunch.setText("Домашний регион");
                 }
             }
+        }
+    }
+    private RegionObject findRegion(String regNumber,ArrayList<RegionObject> arr){
+        RegionObject object;
+        for(int i = 0;i<arr.size();i++){
+            object = arr.get(i);
+            if(object.getRegionNumber().equals(regNumber)){
+                return object;
             }
+        }
+        return null;
     }
     private void saveRegion(RegionObject obj){
 
@@ -149,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
             jsonObject.put(AppData.REGION_NUMBER,obj.getRegionNumber());
             jsonObject.put(AppData.REGION_LAT,obj.getLat());
             jsonObject.put(AppData.REGION_LON,obj.getLon());
+
+            String s = jsonObject.toString();
+            sharedPreferences.edit().putString(HOME_REG_VALUE,s).apply();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -160,8 +191,20 @@ public class MainActivity extends AppCompatActivity {
 
     private String calculateDistance(Double lat,Double lon){
         if(homeRegion != null){
-            String dist = "1";
-            //Method Realization
+            double latHome = homeRegion.getLat();
+            double lonHome = homeRegion.getLon();
+
+            Location locationHome = new Location("home");
+            locationHome.setLatitude(latHome);
+            locationHome.setLongitude(lonHome);
+
+            Location locationDest = new Location("destination");
+            locationDest.setLatitude(lat);
+            locationDest.setLongitude(lon);
+
+            //converts to km by dividing by 1000
+            double distance = locationHome.distanceTo(locationDest)/1000;
+            String dist =  new DecimalFormat("#####").format(distance);
 
             return dist;
         }
@@ -169,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private RegionObject loadHomeRegion(){
-        homeRegion = null;
+        RegionObject regObj;
         String jsonString = sharedPreferences.getString(HOME_REG_VALUE,"");
         if(jsonString != null){
             try {
@@ -178,12 +221,15 @@ public class MainActivity extends AppCompatActivity {
                 String num = obj.getString(AppData.REGION_NUMBER);
                 double lat = obj.getDouble(AppData.REGION_LAT);
                 double lon = obj.getDouble(AppData.REGION_LON);
-                homeRegion = new RegionObject(num,name,lat,lon);
+                regObj = new RegionObject(num,name,lat,lon);
+                Toast.makeText(this,regObj.getRegionName(),Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
                 e.printStackTrace();
+                Toast.makeText(this,"null",Toast.LENGTH_SHORT).show();
+                regObj = null;
             }
-        }
-        return homeRegion;
+            return regObj;
+        }else{return null;}
     }
 
 }
