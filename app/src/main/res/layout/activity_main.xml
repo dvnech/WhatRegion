@@ -10,13 +10,15 @@
         android:id="@+id/etRegionNum"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:clickable="false"
+        android:clickable="true"
         android:ems="10"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:gravity="center|center_horizontal|center_vertical"
-        android:hint="000"
+        android:hint="00"
         android:inputType="number"
         android:maxLength="3"
-        android:textSize="40dp"
+        android:textSize="50sp"
         app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,11 +37,12 @@
         app:layout_constraintVertical_bias="0.45" />
 
     <TextView
-        android:onClick="onButtonPressed"
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onButtonPressed"
         android:text="Введите регион"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/etRegionNum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
